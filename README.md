@@ -6,7 +6,7 @@
 
 ```
 using Pkg
-Pkg.add(PackageSpec(;name="SeqUMAP",url="https://github.com/murrellb/SeqUMAP.jl.git"))
+Pkg.add(PackageSpec(;name="SeqUMAP",url="https://github.com/MurrellGroup/SeqUMAP.jl.git"))
 ```
 
 ### Usage
