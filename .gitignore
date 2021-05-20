@@ -1,0 +1,9 @@
+*
+!.gitignore
+!src/
+!src/*
+!test/
+!test/*
+!LICENSE
+!Project.toml
+!README.md
