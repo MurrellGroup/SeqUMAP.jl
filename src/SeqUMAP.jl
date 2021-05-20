@@ -24,6 +24,7 @@ kmer_embed,
 
 #projection.jl...
 CorrectedKmer,
-sequmap
+sequmap,
+seqpca
 
 end
