@@ -51,3 +51,31 @@ function sequmap(seqs::Array{String,1}, ndim::Int;
     return proj
 end
 
+#top level function 
+function seqpca(seqs::Array{String,1}, ndim::Int;
+    k = 5,
+    lookup_dic = NT_DICT,
+    pca = true,
+    pca_maxoutdim = 5,
+    n_neighbors = 12, 
+    min_dist = 0.7,
+    repulsion_strength = 0.1,
+    metric = SqEuclidean(),
+    umap_kwargs = Pair{Symbol,Any}[] #can also put all umap args together
+    )
+    vecs = []
+    missing_chars = Set{Char}()
+    for seq in seqs
+        vec, missing_chars = kmer_embed(seq, k, kmer_count!; lookup_dic = lookup_dic, missing_chars = missing_chars);
+        push!(vecs, vec)
+    end
+    if length(missing_chars) > 0
+        @warn "Ignored the following characters missing from lookup: $(unique(missing_chars)). Check your sequence type!"
+    end
+    
+    X = hcat(vecs...);
+    X = convert(Array{Float64,2}, X)
+    M = fit(PCA, X; maxoutdim = pca_maxoutdim)
+    
+    return transform(M, X)
+end
