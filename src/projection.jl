@@ -44,9 +44,9 @@ function sequmap(seqs::Array{String,1}, ndim::Int;
     if pca 
         M = fit(PCA, X; maxoutdim = pca_maxoutdim)
         PCAembedding = transform(M, X);
-        proj = umap(PCAembedding, ndim; n_neighbors = n_neighbors, min_dist = min_dist, metric = metric, umap_kwargs...)
+        proj = umap(PCAembedding, ndim; n_neighbors = n_neighbors, min_dist = min_dist, repulsion_strength = repulsion_strength, metric = metric, umap_kwargs...)
     else
-        proj = umap(X, ndim; n_neighbors = n_neighbors, min_dist = min_dist, metric = metric, umap_kwargs...)
+        proj = umap(X, ndim; n_neighbors = n_neighbors, min_dist = min_dist, repulsion_strength = repulsion_strength, metric = metric, umap_kwargs...)
     end
     return proj
 end
