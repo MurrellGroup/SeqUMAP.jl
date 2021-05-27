@@ -52,3 +52,12 @@ AA_DICT = Dict(
 
 NT_DICT = Dict('A' => 1, 'C' => 2, 'G' => 3, 'T' => 4)
 ```
+
+Embeddings can be easily visualized with PyPlot or other common Julia plotting libraries. 
+
+```julia-repl
+using PyPlot
+
+fig, ax = subplots()
+ax.scatter(proj[1, :], proj[2, :]; s = 2.0, linewidth = 0.0)
+```
