@@ -25,8 +25,13 @@ Optionally remove gaps and convert 'U' => 'T' with
 seqs_clean = clean_nt.(seqs; to_strip = ['-']);
 ```
 
-Then, obtain a SeqUMAP projection with 
+Then, obtain a SeqUMAP projection, using the default settings, with 
 
+```
+proj = sequmap(seqs_clean, 2)
+```
+
+The full list of options are:
 ```
 proj = sequmap(seqs_clean, ndim; 
     k = 5, lookup_dic = NT_DICT, pca = true, pca_maxoutdim = 5, 
