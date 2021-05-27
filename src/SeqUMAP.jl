@@ -1,12 +1,15 @@
 module SeqUMAP
 
 using Distances
+using FASTX
 import MultivariateStats: fit, PCA, transform
 import UMAP: umap
+
 
 include("encoding.jl")
 include("embedding.jl")
 include("projection.jl")
+include("io.jl")
 
 #encoding.jl...
 export AA_DICT,
@@ -25,6 +28,12 @@ kmer_embed,
 #projection.jl...
 CorrectedKmer,
 sequmap,
-seqpca
+seqpca,
+
+#io.jl
+read_fasta,
+read_fastq,
+clean_nt, 
+clean_aa
 
 end
