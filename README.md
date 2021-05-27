@@ -1,23 +1,45 @@
 # SeqUMAP.jl
 
-[In progress.] Encode and embed sequences as kmer vectors (both NT and AA) and generate projections using UMAP.jl.
+Alignment-free embedding of sequences via kmer-counting and UMAP.jl.
 
 ### Setup
 
-```
+From the Julia REPL:
+
+```julia-repl
 using Pkg
 Pkg.add(PackageSpec(;name="SeqUMAP",url="https://github.com/MurrellGroup/SeqUMAP.jl.git"))
 ```
 
 ### Usage
 
-Embed and project sequences using
+Import sequences from a file by running 
+
+```julia-repl
+seqnames, seqs = read_fasta("my_sequences.fa");
+```
+
+Optionally remove gaps and convert 'U' => 'T' with
+
+```julia-repl
+seqs_clean = clean_nt.(seqs; to_strip = ['-']);
+```
+
+Then, obtain a SeqUMAP projection with 
 
 ```
-proj = sequmap(seqs, ndim; k = 2, lookup_dic = NT_DICT, n_neighbors = 30, min_dist = 1e-3)
+proj = sequmap(seqs_clean, ndim; 
+    k = 5, lookup_dic = NT_DICT, pca = true, pca_maxoutdim = 5, 
+    n_neighbors = 12, min_dist = 0.7, repulsion_strength = 0.1, 
+    metric = SqEuclidean(), umap_kwargs = Pair{Symbol,Any}[]
+    )
 ```
 
-where `seqs` is an array of strings, `ndim` is the number of projected dimensions and `k` is the kmer size. By default, sequences are embedded by counting all unique kmers and the distance between seuqences is estimated using corrected kmer distance, provided as the `CorrectedKmer(k)` metric. The following lookup dictionaries are included for sequence encoding:
+where `seqs` is an array of strings, `ndim` is the number of projected dimensions and `k` is the kmer size. If using nucleotide sequences with an {'A', 'T', 'C', 'G'} alphabet, pass `SeqUMAP.NT_DICT` as the character lookup. If `pca` is specified, PCA will be run on kmer vectors prior to UMAP embedding with `pca_maxoutdim` components. 
+
+UMAP parameters `n_neighbors`, `min_dist`, `repulsion_strength` and `metric` can also be specified, with the default options shown here. If you want to pass UMAP additional keyword arguments, you can do so by providing them in `umap_kwargs`.
+
+Both AA and NT dictionaries are included for sequence encoding. For AA, k=2 is usually sufficient due to the larger alphabet. For NT, start with k=5 or k=6. 
 
 ```
 AA_DICT = Dict(
