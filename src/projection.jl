@@ -9,14 +9,14 @@ correctedkmer(a::AbstractArray, b::AbstractArray, k::Int) = CorrectedKmer(k)(a, 
 correctedkmer(a::Number, b::Number, k::Int) = CorrectedKmer(k)(a, b)
 
 #looking back at RAD paper not sure about this... check!
-function evaluate(dist::CorrectedKmer,a,b)
+function evaluate(dist::CorrectedKmer, a, b)
     D = sqeuclidean(a,b)
     #dist.N*log(1 -  minimum([D / (dist.N * 2),1])) / - dist.k
     D / (dist.k * (sum(a) + sum(b)))
 end
 
-@eval @inline (dist::CorrectedKmer)(a::AbstractArray, b::AbstractArray) = evaluate(dist, a, b)
-@eval @inline (dist::CorrectedKmer)(a::Number, b::Number) = evaluate(dist, a, b)
+(dist::CorrectedKmer)(a::AbstractArray, b::AbstractArray) = evaluate(dist, a, b)
+(dist::CorrectedKmer)(a::Number, b::Number) = evaluate(dist, a, b)
 
 #top level function 
 function sequmap(seqs::Array{String,1}, ndim::Int;
@@ -29,7 +29,7 @@ function sequmap(seqs::Array{String,1}, ndim::Int;
     repulsion_strength = 0.1,
     metric = SqEuclidean(),
     umap_kwargs = Pair{Symbol,Any}[] #can also put all umap args together
-    )
+)
     vecs = []
     missing_chars = Set{Char}()
     for seq in seqs
